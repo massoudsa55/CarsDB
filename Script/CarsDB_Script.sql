@@ -1,6 +1,6 @@
 USE [master]
 GO
-/****** Object:  Database [CarsDB]    Script Date: 22-04-2022 2:26:12 ******/
+/****** Object:  Database [CarsDB]    Script Date: 22-04-2022 19:20:14 ******/
 CREATE DATABASE [CarsDB]
  CONTAINMENT = NONE
  ON  PRIMARY 
@@ -25,7 +25,7 @@ ALTER DATABASE [CarsDB] SET ANSI_WARNINGS OFF
 GO
 ALTER DATABASE [CarsDB] SET ARITHABORT OFF 
 GO
-ALTER DATABASE [CarsDB] SET AUTO_CLOSE OFF 
+ALTER DATABASE [CarsDB] SET AUTO_CLOSE ON 
 GO
 ALTER DATABASE [CarsDB] SET AUTO_SHRINK OFF 
 GO
@@ -75,19 +75,20 @@ ALTER DATABASE [CarsDB] SET DELAYED_DURABILITY = DISABLED
 GO
 USE [CarsDB]
 GO
-/****** Object:  Table [dbo].[Cars]    Script Date: 22-04-2022 2:26:12 ******/
+/****** Object:  Table [dbo].[Cars]    Script Date: 22-04-2022 19:20:14 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Cars](
 	[ID_Car] [int] IDENTITY(1,1) NOT NULL,
-	[RegistrationNumber] [nvarchar](max) NOT NULL,
-	[ID_Mark] [int] NOT NULL,
-	[Model_Name] [nvarchar](max) NOT NULL,
-	[Date_Product] [date] NOT NULL,
-	[Mileage] [nvarchar](max) NOT NULL,
+	[RegistrationNumber] [nvarchar](max) NULL,
+	[Model_Name] [nvarchar](max) NULL,
+	[Date_Product] [date] NULL,
+	[Quantity_IN_Stock] [int] NULL,
+	[Mileage] [nvarchar](max) NULL,
 	[Image] [image] NULL,
+	[ID_Mark] [int] NOT NULL,
  CONSTRAINT [PK_Cars] PRIMARY KEY CLUSTERED 
 (
 	[ID_Car] ASC
@@ -95,7 +96,7 @@ CREATE TABLE [dbo].[Cars](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[Clients]    Script Date: 22-04-2022 2:26:12 ******/
+/****** Object:  Table [dbo].[Clients]    Script Date: 22-04-2022 19:20:14 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -121,7 +122,7 @@ CREATE TABLE [dbo].[Clients](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[Customers]    Script Date: 22-04-2022 2:26:12 ******/
+/****** Object:  Table [dbo].[Customers]    Script Date: 22-04-2022 19:20:14 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -146,7 +147,7 @@ CREATE TABLE [dbo].[Customers](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[InvoicesBuy]    Script Date: 22-04-2022 2:26:12 ******/
+/****** Object:  Table [dbo].[InvoicesBuy]    Script Date: 22-04-2022 19:20:14 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -157,8 +158,7 @@ CREATE TABLE [dbo].[InvoicesBuy](
 	[ID_Customer] [int] NOT NULL,
 	[Buy_Date] [date] NOT NULL,
 	[Buy_Time] [time](7) NOT NULL,
-	[CostPrice] [float] NOT NULL,
-	[SalePrice] [float] NOT NULL,
+	[BoyPrice] [float] NOT NULL,
 	[Quantity] [int] NOT NULL,
 	[Note] [nvarchar](max) NULL,
 	[ID_User] [int] NOT NULL,
@@ -169,56 +169,7 @@ CREATE TABLE [dbo].[InvoicesBuy](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[InvoicesRent]    Script Date: 22-04-2022 2:26:12 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[InvoicesRent](
-	[ID_InvoiceRent] [int] IDENTITY(1,1) NOT NULL,
-	[Car_ID] [int] NOT NULL,
-	[ID_Client] [int] NOT NULL,
-	[Date_Rent_Start] [date] NOT NULL,
-	[Date_Rent_End] [date] NOT NULL,
-	[Time_Rent_Start] [time](7) NOT NULL,
-	[Time_Rent_End] [time](7) NOT NULL,
-	[CostPrice] [float] NOT NULL,
-	[SalePrice] [float] NOT NULL,
-	[RentPrice] [float] NOT NULL,
-	[Quantity] [int] NOT NULL,
-	[Note] [nvarchar](max) NULL,
-	[ID_User] [int] NOT NULL,
- CONSTRAINT [PK_InvoicesRent] PRIMARY KEY CLUSTERED 
-(
-	[ID_InvoiceRent] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
-GO
-/****** Object:  Table [dbo].[InvoicesSale]    Script Date: 22-04-2022 2:26:12 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[InvoicesSale](
-	[ID_InvoiceSale] [int] IDENTITY(1,1) NOT NULL,
-	[ID_Car] [int] NOT NULL,
-	[ID_Client] [int] NOT NULL,
-	[Sale_Date] [date] NOT NULL,
-	[Sale_Time] [time](7) NOT NULL,
-	[CostPrice] [float] NOT NULL,
-	[SalePrice] [float] NOT NULL,
-	[Quantity] [int] NOT NULL,
-	[Note] [nvarchar](max) NULL,
-	[ID_User] [int] NOT NULL,
- CONSTRAINT [PK_InvoicesSale] PRIMARY KEY CLUSTERED 
-(
-	[ID_InvoiceSale] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
-GO
-/****** Object:  Table [dbo].[Marks]    Script Date: 22-04-2022 2:26:12 ******/
+/****** Object:  Table [dbo].[Marks]    Script Date: 22-04-2022 19:20:14 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -233,7 +184,41 @@ CREATE TABLE [dbo].[Marks](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[Permissions]    Script Date: 22-04-2022 2:26:12 ******/
+/****** Object:  Table [dbo].[Orders]    Script Date: 22-04-2022 19:20:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Orders](
+	[ID_Order] [int] IDENTITY(1,1) NOT NULL,
+	[Date_Order] [date] NULL,
+	[ID_Client] [int] NULL,
+	[ID_User] [int] NULL,
+ CONSTRAINT [PK_Orders] PRIMARY KEY CLUSTERED 
+(
+	[ID_Order] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Orders_Details]    Script Date: 22-04-2022 19:20:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Orders_Details](
+	[ID_Stock] [int] NULL,
+	[ID_Order] [int] NULL,
+	[Quantity] [int] NULL,
+	[IS_Rent] [bit] NULL,
+	[Date_Rent_Start] [date] NULL,
+	[Date_Rent_End] [date] NULL,
+	[Time_Rent_Start] [time](7) NULL,
+	[Time_Rent_End] [time](7) NULL
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Permissions]    Script Date: 22-04-2022 19:20:14 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -249,7 +234,26 @@ CREATE TABLE [dbo].[Permissions](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[TypeUser]    Script Date: 22-04-2022 2:26:12 ******/
+/****** Object:  Table [dbo].[Stocks]    Script Date: 22-04-2022 19:20:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Stocks](
+	[ID_Stock] [int] IDENTITY(1,1) NOT NULL,
+	[ID_InvoiceBuy] [int] NULL,
+	[SalePrice] [float] NULL,
+	[RentPrice] [float] NULL,
+	[Quantity] [int] NULL,
+	[Note] [nvarchar](max) NULL,
+ CONSTRAINT [PK_Stocks] PRIMARY KEY CLUSTERED 
+(
+	[ID_Stock] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[TypeUser]    Script Date: 22-04-2022 19:20:14 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -265,7 +269,7 @@ CREATE TABLE [dbo].[TypeUser](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[Users]    Script Date: 22-04-2022 2:26:12 ******/
+/****** Object:  Table [dbo].[Users]    Script Date: 22-04-2022 19:20:14 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -313,41 +317,38 @@ ON UPDATE CASCADE
 GO
 ALTER TABLE [dbo].[InvoicesBuy] CHECK CONSTRAINT [FK_InvoicesBuy_Users]
 GO
-ALTER TABLE [dbo].[InvoicesRent]  WITH CHECK ADD  CONSTRAINT [FK_InvoicesRent_Cars] FOREIGN KEY([Car_ID])
-REFERENCES [dbo].[Cars] ([ID_Car])
-ON UPDATE CASCADE
-GO
-ALTER TABLE [dbo].[InvoicesRent] CHECK CONSTRAINT [FK_InvoicesRent_Cars]
-GO
-ALTER TABLE [dbo].[InvoicesRent]  WITH CHECK ADD  CONSTRAINT [FK_InvoicesRent_Clients] FOREIGN KEY([ID_Client])
+ALTER TABLE [dbo].[Orders]  WITH CHECK ADD  CONSTRAINT [FK_Orders_Clients] FOREIGN KEY([ID_Client])
 REFERENCES [dbo].[Clients] ([ID_Client])
 ON UPDATE CASCADE
+ON DELETE CASCADE
 GO
-ALTER TABLE [dbo].[InvoicesRent] CHECK CONSTRAINT [FK_InvoicesRent_Clients]
+ALTER TABLE [dbo].[Orders] CHECK CONSTRAINT [FK_Orders_Clients]
 GO
-ALTER TABLE [dbo].[InvoicesRent]  WITH CHECK ADD  CONSTRAINT [FK_InvoicesRent_Users] FOREIGN KEY([ID_User])
+ALTER TABLE [dbo].[Orders]  WITH CHECK ADD  CONSTRAINT [FK_Orders_Users] FOREIGN KEY([ID_User])
 REFERENCES [dbo].[Users] ([ID_User])
 ON UPDATE CASCADE
+ON DELETE CASCADE
 GO
-ALTER TABLE [dbo].[InvoicesRent] CHECK CONSTRAINT [FK_InvoicesRent_Users]
+ALTER TABLE [dbo].[Orders] CHECK CONSTRAINT [FK_Orders_Users]
 GO
-ALTER TABLE [dbo].[InvoicesSale]  WITH CHECK ADD  CONSTRAINT [FK_InvoicesSale_Cars] FOREIGN KEY([ID_Car])
-REFERENCES [dbo].[Cars] ([ID_Car])
+ALTER TABLE [dbo].[Orders_Details]  WITH CHECK ADD  CONSTRAINT [FK_Orders_Details_Orders] FOREIGN KEY([ID_Order])
+REFERENCES [dbo].[Orders] ([ID_Order])
 ON UPDATE CASCADE
+ON DELETE CASCADE
 GO
-ALTER TABLE [dbo].[InvoicesSale] CHECK CONSTRAINT [FK_InvoicesSale_Cars]
+ALTER TABLE [dbo].[Orders_Details] CHECK CONSTRAINT [FK_Orders_Details_Orders]
 GO
-ALTER TABLE [dbo].[InvoicesSale]  WITH CHECK ADD  CONSTRAINT [FK_InvoicesSale_Clients] FOREIGN KEY([ID_Client])
-REFERENCES [dbo].[Clients] ([ID_Client])
+ALTER TABLE [dbo].[Orders_Details]  WITH CHECK ADD  CONSTRAINT [FK_Orders_Details_Stocks] FOREIGN KEY([ID_Stock])
+REFERENCES [dbo].[Stocks] ([ID_Stock])
+GO
+ALTER TABLE [dbo].[Orders_Details] CHECK CONSTRAINT [FK_Orders_Details_Stocks]
+GO
+ALTER TABLE [dbo].[Stocks]  WITH CHECK ADD  CONSTRAINT [FK_Stocks_InvoicesBuy] FOREIGN KEY([ID_InvoiceBuy])
+REFERENCES [dbo].[InvoicesBuy] ([ID_InvoiceBuy])
 ON UPDATE CASCADE
+ON DELETE CASCADE
 GO
-ALTER TABLE [dbo].[InvoicesSale] CHECK CONSTRAINT [FK_InvoicesSale_Clients]
-GO
-ALTER TABLE [dbo].[InvoicesSale]  WITH CHECK ADD  CONSTRAINT [FK_InvoicesSale_Users] FOREIGN KEY([ID_User])
-REFERENCES [dbo].[Users] ([ID_User])
-ON UPDATE CASCADE
-GO
-ALTER TABLE [dbo].[InvoicesSale] CHECK CONSTRAINT [FK_InvoicesSale_Users]
+ALTER TABLE [dbo].[Stocks] CHECK CONSTRAINT [FK_Stocks_InvoicesBuy]
 GO
 ALTER TABLE [dbo].[TypeUser]  WITH CHECK ADD  CONSTRAINT [FK_TypeUser_Permissions] FOREIGN KEY([ID_Permission])
 REFERENCES [dbo].[Permissions] ([ID_Permission])
